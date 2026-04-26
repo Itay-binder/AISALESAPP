@@ -40,6 +40,17 @@ Monorepo skeleton implementing the approved MVP:
 3. Set environment variables (see `.env.example`).
 4. `npm run dev`
 
+### Cloud Run (Docker)
+
+מתוך תיקיית `backend/` (אחרי `gcloud auth login` ו־`gcloud config set project <PROJECT_ID>`):
+
+```bash
+gcloud run deploy call-recording-api --source . --region europe-west1 --allow-unauthenticated
+```
+
+אחרי הפריסה: הוסף ב־Cloud Run → **Edit service** את משתני הסביבה מ־`.env.example`, וחבר את **Service account** עם הרשאות Storage + Speech + Firestore.  
+(אפשר גם `--no-allow-unauthenticated` ואז להגן ב־API Gateway / IAP — ל‑MVP לעיתים משאירים פתוח ומגנים בטוקן על הנתיבים.)
+
 ### CRM (Liftygo — real repo)
 
 1. Copy `integrations/liftygo-crm/app/api/ingest/call-insights/route.ts` into [Itay-binder/CRM](https://github.com/Itay-binder/CRM).
