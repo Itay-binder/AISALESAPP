@@ -27,8 +27,10 @@ export async function processCall(callId: string): Promise<void> {
     const analysis = await analyzeTranscript(transcript, job.upload);
     await setAnalysis(callId, analysis);
 
-    await updateJobStatus(callId, "delivering");
-    await deliverToCrm(job, analysis);
+    if (config.enableCrmDelivery) {
+      await updateJobStatus(callId, "delivering");
+      await deliverToCrm(job, analysis);
+    }
 
     await updateJobStatus(callId, "completed");
   } catch (error) {

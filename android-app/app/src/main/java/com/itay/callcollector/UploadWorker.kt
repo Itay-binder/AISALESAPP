@@ -25,7 +25,7 @@ class UploadWorker(
                 if (!isFileStable(candidate.file)) continue
 
                 val tokenResponse = backend.requestUploadToken(agentId, candidate.fingerprint)
-                backend.notifyUploadComplete(tokenResponse.token, tokenResponse.callId, candidate.file, agentId)
+                backend.uploadFile(tokenResponse.token, tokenResponse.callId, candidate.file, agentId)
                 store.save(candidate.fingerprint)
             }
             Result.success()

@@ -17,8 +17,10 @@ export const config = {
   firestoreCollection: process.env.FIRESTORE_COLLECTION ?? "call_jobs",
   openAiApiKey: required("OPENAI_API_KEY"),
   openAiModel: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
-  crmWebhookUrl: required("CRM_WEBHOOK_URL"),
-  crmHmacSecret: required("CRM_HMAC_SECRET"),
+  openAiTranscriptionModel: process.env.OPENAI_TRANSCRIPTION_MODEL ?? "gpt-4o-mini-transcribe",
+  enableCrmDelivery: process.env.ENABLE_CRM_DELIVERY === "true",
+  crmWebhookUrl: process.env.CRM_WEBHOOK_URL?.trim(),
+  crmHmacSecret: process.env.CRM_HMAC_SECRET?.trim(),
   uploadTokenSigningSecret: required("UPLOAD_TOKEN_SIGNING_SECRET"),
   jobRetryLimit: Number(process.env.JOB_RETRY_LIMIT ?? "5")
 };

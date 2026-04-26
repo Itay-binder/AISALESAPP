@@ -1,8 +1,10 @@
 package com.itay.callcollector
 
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
@@ -43,28 +45,24 @@ class BackendClient {
         }
     }
 
-    /**
-     * MVP placeholder: this notifies backend after local validation.
-     * Replace with a signed upload URL flow for direct GCS upload in production.
-     */
-    fun notifyUploadComplete(uploadToken: String, callId: String, file: File, agentId: String) {
-        val body = JSONObject()
-            .put("callId", callId)
-            .put("agentId", agentId)
-            .put("recordingPath", "incoming/${file.name}")
-            .put("fileSizeBytes", file.length())
-            .put("uploadedAt", java.time.Instant.now().toString())
-            .toString()
-            .toRequestBody(jsonType)
+    fun uploadFile(uploadToken: String, callId: String, file: File, agentId: String) {
+        val mediaType = "audio/*".toMediaType()
+        val multipart = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("callId", callId)
+            .addFormDataPart("agentId", agentId)
+            .addFormDataPart("recordingPath", "incoming/$callId.wav")
+            .addFormDataPart("file", file.name, file.asRequestBody(mediaType))
+            .build()
 
         val request = Request.Builder()
-            .url("${AppConfig.BACKEND_BASE_URL}/v1/ingest/upload-complete")
+            .url("${AppConfig.BACKEND_BASE_URL}/v1/upload-file")
             .header("Authorization", "Bearer $uploadToken")
-            .post(body)
+            .post(multipart)
             .build()
 
         http.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) error("Upload notify failed: ${response.code}")
+            if (!response.isSuccessful) error("File upload failed: ${response.code}")
         }
     }
 }

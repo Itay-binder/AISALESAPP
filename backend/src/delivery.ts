@@ -4,10 +4,16 @@ import { config } from "./config.js";
 import { AnalysisOutput, JobRecord } from "./types.js";
 
 function sign(payload: string): string {
+  if (!config.crmHmacSecret) {
+    throw new Error("CRM_HMAC_SECRET is missing while CRM delivery is enabled");
+  }
   return crypto.createHmac("sha256", config.crmHmacSecret).update(payload).digest("hex");
 }
 
 export async function deliverToCrm(job: JobRecord, analysis: AnalysisOutput): Promise<void> {
+  if (!config.crmWebhookUrl) {
+    throw new Error("CRM_WEBHOOK_URL is missing while CRM delivery is enabled");
+  }
   const body = JSON.stringify({
     idempotency_key: job.idempotencyKey,
     call_id: job.callId,
