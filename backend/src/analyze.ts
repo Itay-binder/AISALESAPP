@@ -7,7 +7,7 @@ import { AnalysisOutput, UploadNotification } from "./types.js";
 const analysisSchema = z.object({
   call_id: z.string(),
   agent_id: z.string(),
-  customer_id: z.string().optional(),
+  customer_id: z.string().nullable().optional(),
   summary_short: z.string(),
   tab1_general_summary: z.string(),
   tab2_personal_analysis: z.string(),
@@ -73,6 +73,7 @@ export async function analyzeTranscript(
           required: [
             "call_id",
             "agent_id",
+            "customer_id",
             "summary_short",
             "tab1_general_summary",
             "tab2_personal_analysis",
@@ -82,7 +83,7 @@ export async function analyzeTranscript(
           properties: {
             call_id: { type: "string" },
             agent_id: { type: "string" },
-            customer_id: { type: "string" },
+            customer_id: { type: ["string", "null"] },
             summary_short: {
               type: "string",
               description: "One or two sentences for CRM list view"

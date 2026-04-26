@@ -20,7 +20,7 @@ export interface UploadNotification {
 export interface AnalysisOutput {
   call_id: string;
   agent_id: string;
-  customer_id?: string;
+  customer_id?: string | null;
   /** שורה אחת לתצוגה ברשימות ב-CRM */
   summary_short: string;
   /** טאב 1 — סיכום כללי מלא, עם ציטוטים רק מהטרנסקריפט */
