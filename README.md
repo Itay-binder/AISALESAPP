@@ -42,14 +42,16 @@ Monorepo skeleton implementing the approved MVP:
 
 ### Cloud Run (Docker)
 
-מתוך תיקיית `backend/` (אחרי `gcloud auth login` ו־`gcloud config set project <PROJECT_ID>`):
+**פריסה מקומית מתוך `backend/`:**
 
 ```bash
+cd backend
 gcloud run deploy call-recording-api --source . --region europe-west1 --allow-unauthenticated
 ```
 
-אחרי הפריסה: הוסף ב־Cloud Run → **Edit service** את משתני הסביבה מ־`.env.example`, וחבר את **Service account** עם הרשאות Storage + Speech + Firestore.  
-(אפשר גם `--no-allow-unauthenticated` ואז להגן ב־API Gateway / IAP — ל‑MVP לעיתים משאירים פתוח ומגנים בטוקן על הנתיבים.)
+**פריסה מ־GitHub (“Connect repository”)** — Cloud Build מחפש `Dockerfile` ב־**שורש הריפו**. לכן קיים [`Dockerfile`](Dockerfile) בשורש שמעתיק את `backend/` לתוך התמונה.
+
+אחרי הפריסה: ב־Cloud Run → **Edit service** — משתני סביבה מ־`backend/.env.example` + **Service account** עם הרשאות Storage + Speech + Firestore.
 
 ### CRM (Liftygo — real repo)
 

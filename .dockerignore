@@ -1,0 +1,12 @@
+.git
+.github
+android-app
+vercel-crm
+docs
+integrations
+**/node_modules
+**/.env
+**/.env.*
+**/*.md
+backend/node_modules
+backend/dist
