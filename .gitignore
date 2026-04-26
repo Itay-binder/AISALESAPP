@@ -5,3 +5,6 @@ dist/
 .env.local
 **/.DS_Store
 _crm_upstream/
+android-app/keystore.properties
+android-app/*.jks
+android-app/*.keystore
